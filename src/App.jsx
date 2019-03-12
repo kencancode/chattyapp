@@ -22,13 +22,36 @@ class App extends Component {
     }
   }
 
-  render() {
+  componentDidMount() {
+  console.log("componentDidMount <App />");
+  setTimeout(() => {
+    console.log("Simulating incoming message");
+    // Add a new message to the list of messages in the data store
+    const newMessage = {id: 3, username: "Michelle", content: "Hello there!"};
+    const messages = this.state.messages.concat(newMessage)
+    // Update the state of the app component.
+    // Calling setState will trigger a call to render() in App and all child components.
+    this.setState({messages: messages})
+    }, 3000);
+  }
 
+  handleKeyPress = (event) => {
+    if(event.key === 'Enter'){
+      let messages = this.state.messages
+      let message = {username: event.target.previousSibling.value , content: event.target.value}
+      messages.push(message)
+      this.setState( messages );
+      event.target.value = " "
+    }
+  }
+
+
+  render() {
     return (
       <div>
       <NavBar/>
       <MessageList messages = {this.state.messages}/>
-      <ChatBar username={this.state.currentUser.name} />
+      <ChatBar username={this.state.currentUser.name} handleKeyPress={this.handleKeyPress} />
       </div>
     );
   }

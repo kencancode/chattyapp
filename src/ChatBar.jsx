@@ -6,11 +6,10 @@ export default class ChatBar extends Component {
       <div>
       <footer className="chatbar">
         <input className="chatbar-username" placeholder={this.props.username} />
-        <input className="chatbar-message" placeholder="Type a message and hit ENTER" />
+        <input onKeyPress={this.props.handleKeyPress} className="chatbar-message" placeholder="Type a message and hit ENTER" />
       </footer>
       </div>
     )
   }
 }
-
 
