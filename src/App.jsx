@@ -38,10 +38,11 @@ class App extends Component {
   handleKeyPress = (event) => {
     if(event.key === 'Enter'){
       let messages = this.state.messages
-      let message = {username: event.target.previousSibling.value , content: event.target.value}
-      messages.push(message)
+      let newMessage = {username: event.target.previousSibling.value , content: event.target.value}
+      messages.push(newMessage)
       this.setState( messages );
-      event.target.value = " "
+      event.target.value = " ";
+      event.target.previousSibling.value = " ";
     }
   }
 
