@@ -22,7 +22,15 @@ class App extends Component {
     }
   }
 
+
+  socket = new WebSocket("ws://localhost:3001");
   componentDidMount() {
+  this.socket.onopen = function (event) {
+    console.log("Server connected");
+  };
+
+
+
   console.log("componentDidMount <App />");
   setTimeout(() => {
     console.log("Simulating incoming message");
@@ -43,6 +51,8 @@ class App extends Component {
       this.setState( messages );
       event.target.value = " ";
       event.target.previousSibling.value = " ";
+
+      this.socket.send(JSON.stringify(newMessage))
     }
   }
 
