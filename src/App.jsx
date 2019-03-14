@@ -21,8 +21,20 @@ class App extends Component {
   };
 
   this.socket.addEventListener("message", (event) => {
-    let message = JSON.parse(event.data)
     console.log(message)
+    let message = JSON.parse(event.data)
+    // switch(message.type){
+    //   case "incomingMessage":
+    //   //handle incoming message
+
+    //     break;
+    //   case "incomingNotification":
+    //   ////handle notifications
+    //     break;
+    //   default:
+    //   // show error in console if message type is unknown
+    //   throw new Error("unknown event type " + message.type)
+    // }
     this.setState({messages: [...this.state.messages, message]})
   })
   }
@@ -32,8 +44,9 @@ class App extends Component {
     if(event.key === 'Enter'){
       let messages = this.state.messages
       let newMessage = { username: event.target.previousSibling.value , content: event.target.value}
-      // messages.push(newMessage)
+      // messages.push(newMessage);
       // this.setState( messages );
+     this.setState({currentUser : event.target.previousSibling.value})
       event.target.value = " ";
       event.target.previousSibling.value = " ";
 
