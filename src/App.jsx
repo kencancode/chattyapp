@@ -23,32 +23,27 @@ class App extends Component {
   this.socket.addEventListener("message", (event) => {
     console.log(message)
     let message = JSON.parse(event.data)
-    // switch(message.type){
-    //   case "incomingMessage":
-    //   //handle incoming message
-
-    //     break;
-    //   case "incomingNotification":
-    //   ////handle notifications
-    //     break;
-    //   default:
-    //   // show error in console if message type is unknown
-    //   throw new Error("unknown event type " + message.type)
-    // }
     this.setState({messages: [...this.state.messages, message]})
   })
   }
 
+  changeUsername = event => {
+
+    const oldUser = this.state.currentUser.name;
+    this.setState( { currentUser: {name: event.target.value } } )
+    const postNotification = {
+      type: 'postMessage',
+      content: `${oldUser} has changed his name to ${event.target.value}`
+    }
+
+    this.socket.send(JSON.stringify(postNotification))
+  }
 
   handleKeyPress = (event) => {
     if(event.key === 'Enter'){
       let messages = this.state.messages
-      let newMessage = { username: event.target.previousSibling.value , content: event.target.value}
-      // messages.push(newMessage);
-      // this.setState( messages );
-     this.setState({currentUser : event.target.previousSibling.value})
+      let newMessage = { type: "postMessage", username: this.state.currentUser.name , content: event.target.value}
       event.target.value = " ";
-      event.target.previousSibling.value = " ";
 
       this.socket.send(JSON.stringify(newMessage))
     }
@@ -60,7 +55,7 @@ class App extends Component {
       <div>
       <NavBar/>
       <MessageList messages = {this.state.messages}/>
-      <ChatBar username={this.state.currentUser.name} handleKeyPress={this.handleKeyPress} />
+      <ChatBar username={this.state.currentUser.name} handleKeyPress={this.handleKeyPress} changeUsername={this.changeUsername} />
       </div>
     );
   }
