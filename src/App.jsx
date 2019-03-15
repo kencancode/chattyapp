@@ -8,21 +8,25 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentUser: {name: "Bob"},
-       messages: []
+      currentUser: {name: "Anonymous"},
+       messages: [],
+       counter: 0
     }
   }
 
 
   socket = new WebSocket("ws://localhost:3001");
   componentDidMount() {
-  this.socket.onopen = function (event) {
+  this.socket.onopen = (event) => {
     console.log("Server connected");
   };
 
   this.socket.addEventListener("message", (event) => {
-    console.log(message)
+    if(event.data > 0){
+      this.setState({counter: event.data})
+    }
     let message = JSON.parse(event.data)
+    console.log(message)
     this.setState({messages: [...this.state.messages, message]})
   })
   }
@@ -30,17 +34,23 @@ class App extends Component {
   changeUsername = event => {
 
     const oldUser = this.state.currentUser.name;
+    const newUser = event.target.value ? event.target.value: "Anonymous"
     this.setState( { currentUser: {name: event.target.value } } )
+
+    if (oldUser !== newUser){
     const postNotification = {
-      type: 'postMessage',
+      type: 'postNotification',
       content: `${oldUser} has changed his name to ${event.target.value}`
     }
 
     this.socket.send(JSON.stringify(postNotification))
+    }
+
+
   }
 
   handleKeyPress = (event) => {
-    if(event.key === 'Enter'){
+    if(event.key === 'Enter' && event.target.value){
       let messages = this.state.messages
       let newMessage = { type: "postMessage", username: this.state.currentUser.name , content: event.target.value}
       event.target.value = " ";
@@ -53,7 +63,7 @@ class App extends Component {
   render() {
     return (
       <div>
-      <NavBar/>
+      <NavBar counter={this.state.counter}/ >
       <MessageList messages = {this.state.messages}/>
       <ChatBar username={this.state.currentUser.name} handleKeyPress={this.handleKeyPress} changeUsername={this.changeUsername} />
       </div>
