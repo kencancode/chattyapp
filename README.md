@@ -16,3 +16,5 @@ A minimal chat app where users can communicate in real-time. Bulit with ReactJS 
 * Webpack
 * [babel-loader](https://github.com/babel/babel-loader)
 * [webpack-dev-server](https://github.com/webpack/webpack-dev-server)
+
+!["Chatty App"](https://github.com/kencancode/chattyapp/blob/master/docs/chattyApp.png)
