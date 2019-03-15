@@ -14,25 +14,23 @@ class App extends Component {
     }
   }
 
-
   socket = new WebSocket("ws://localhost:3001");
+
   componentDidMount() {
-  this.socket.onopen = (event) => {
-    console.log("Server connected");
+    this.socket.onopen = (event) => {
+      console.log("Server connected");
   };
 
-  this.socket.addEventListener("message", (event) => {
-    if(event.data > 0){
-      this.setState({counter: event.data})
-    }
-    let message = JSON.parse(event.data)
-    console.log(message)
-    this.setState({messages: [...this.state.messages, message]})
-  })
+    this.socket.addEventListener("message", (event) => {
+      if(event.data > 0){
+        this.setState({counter: event.data})
+      }
+      let message = JSON.parse(event.data)
+       this.setState({messages: [...this.state.messages, message]})
+    })
   }
 
   changeUsername = event => {
-
     const oldUser = this.state.currentUser.name;
     const newUser = event.target.value ? event.target.value: "Anonymous"
     this.setState( { currentUser: {name: event.target.value } } )
@@ -46,7 +44,6 @@ class App extends Component {
     this.socket.send(JSON.stringify(postNotification))
     }
 
-
   }
 
   handleKeyPress = (event) => {
@@ -59,15 +56,15 @@ class App extends Component {
     }
   }
 
-
   render() {
     return (
       <div>
-      <NavBar counter={this.state.counter}/ >
-      <MessageList messages = {this.state.messages}/>
-      <ChatBar username={this.state.currentUser.name} handleKeyPress={this.handleKeyPress} changeUsername={this.changeUsername} />
+        <NavBar counter={this.state.counter}/ >
+        <MessageList messages = {this.state.messages}/>
+        <ChatBar username={this.state.currentUser.name} handleKeyPress={this.handleKeyPress} changeUsername={this.changeUsername} />
       </div>
     );
   }
 }
+
 export default App;
